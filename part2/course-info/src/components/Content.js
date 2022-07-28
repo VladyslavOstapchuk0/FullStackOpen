@@ -1,13 +1,15 @@
 import Part from './Part';
+import Total from './Total';
 
-const Content = (props) => {
+const Content = ({ parts }) => {
   return (
     <>
-      {props.parts.map((part) => {
+      {parts.map((part) => {
         return (
           <Part key={part.id} part={part.name} exercises={part.exercises} />
         );
       })}
+      <Total parts={parts} />
     </>
   );
 };
