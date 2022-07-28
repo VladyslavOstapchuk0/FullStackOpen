@@ -9,6 +9,10 @@ const App = () => {
     const newNameAdd = {
       name: newName,
     };
+    if (persons.filter((e) => e.name === newName).length > 0) {
+      alert(`${newName} is already added to the phonebook`);
+      return;
+    }
 
     setPersons(persons.concat(newNameAdd));
     setNewName('');
@@ -32,7 +36,7 @@ const App = () => {
       <h2>Numbers</h2>
       <>
         {persons.map((person) => {
-          return <p key={person.name}>{person.name}</p>;
+          return <p key={person.name + Math.random()}>{person.name}</p>;
         })}
       </>
     </div>
