@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
+import './App.css';
 import PersonsForm from './components/PersonsForm';
 import PersonsList from './components/PersonsList';
 import Filter from './components/Filter';
 import personsService from './services/persons';
+import NotificationMessage from './components/NotificationMessage';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
+  const [notification, setNotification] = useState({ text: '', type: '' });
 
   const hook = () => {
     personsService.getAll().then((response) => {
@@ -50,6 +53,10 @@ const App = () => {
               );
               let newObj = [...persons];
               newObj[objIndex].number = newNumber;
+              setNotification({ text: `Updated ${newName}`, type: 'success' });
+              setTimeout(() => {
+                setNotification(null);
+              }, 5000);
               setPersons(newObj);
               setNewName('');
               setNewNumber('');
@@ -61,8 +68,11 @@ const App = () => {
     }
 
     personsService.create(newNameAdd).then(() => {
-      // for correct id
       personsService.getAll().then((result) => {
+        setNotification({ text: `Added ${newName}`, type: 'success' });
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
         setNewName('');
         setNewNumber('');
         setPersons(result);
@@ -76,6 +86,10 @@ const App = () => {
         const newPersons = persons.filter((data) => {
           return data.id !== person.id;
         });
+        setNotification({ text: `deleted ${person.name}`, type: 'success' });
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
         setPersons(newPersons);
       });
     }
@@ -85,6 +99,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Filter value={filter} setFilter={setFilter} />
+      <NotificationMessage notification={notification} />
 
       <h3>Add a new</h3>
       <PersonsForm
