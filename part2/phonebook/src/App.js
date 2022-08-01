@@ -27,17 +27,46 @@ const App = () => {
     const newNameAdd = {
       name: newName,
       number: newNumber,
-      id: persons[persons.length - 1].id + 1,
+      // id: persons[persons.length - 1].id + 1,
     };
     if (persons.some((e) => e.name === newName)) {
-      alert(`${newName} is already added to the phonebook`);
-      return;
+      if (newNumber === '') {
+        alert(`${newName} is already added to the phonebook`);
+        return;
+      } else {
+        if (
+          window.confirm(
+            `${newName} is already added to the phonebook, replace old number with a new one?`
+          )
+        ) {
+          const currentPerson = persons.filter(
+            (person) => person.name === newName
+          );
+          return personsService
+            .update(currentPerson[0].id, { ...newNameAdd, number: newNumber })
+            .then(() => {
+              let objIndex = persons.findIndex(
+                (obj) => obj.id === currentPerson[0].id
+              );
+              let newObj = [...persons];
+              newObj[objIndex].number = newNumber;
+              setPersons(newObj);
+              setNewName('');
+              setNewNumber('');
+            });
+        } else {
+          return;
+        }
+      }
     }
 
     personsService.create(newNameAdd).then(() => {
-      setPersons(persons.concat(newNameAdd));
-      setNewName('');
-      setNewNumber('');
+      // for correct id
+      personsService.getAll().then((result) => {
+        setNewName('');
+        setNewNumber('');
+        setPersons(result);
+      });
     });
   };
 
