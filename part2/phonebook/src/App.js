@@ -60,6 +60,17 @@ const App = () => {
               setPersons(newObj);
               setNewName('');
               setNewNumber('');
+            })
+            .catch((err) => {
+              setNewName('');
+              setNewNumber('');
+              setNotification({
+                text: `Information of ${newName} was already deleted from the server`,
+                type: 'error',
+              });
+              setTimeout(() => {
+                setNotification(null);
+              }, 5000);
             });
         } else {
           return;
