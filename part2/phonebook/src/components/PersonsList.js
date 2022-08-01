@@ -1,10 +1,15 @@
-import Person from "./Person";
+import Person from './Person';
 
-const PersonsList = ({ filteredPersons }) => {
+const PersonsList = ({ filteredPersons, handleDelete }) => {
   return (
     <>
       {filteredPersons.map((person) => {
-        return <Person key={person.id} person={person} />;
+        return (
+          <div key={person.id}>
+            <Person person={person} />
+            <button onClick={() => handleDelete(person)}>Delete</button>
+          </div>
+        );
       })}
     </>
   );

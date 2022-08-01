@@ -12,7 +12,7 @@ const App = () => {
 
   const hook = () => {
     personsService.getAll().then((response) => {
-      setPersons(response.data);
+      setPersons(response);
     });
   };
 
@@ -41,6 +41,17 @@ const App = () => {
     });
   };
 
+  const handleDelete = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personsService.deleteOne(person.id).then(() => {
+        const newPersons = persons.filter((data) => {
+          return data.id !== person.id;
+        });
+        setPersons(newPersons);
+      });
+    }
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -56,7 +67,10 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <PersonsList filteredPersons={filteredPersons} />
+      <PersonsList
+        filteredPersons={filteredPersons}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };
