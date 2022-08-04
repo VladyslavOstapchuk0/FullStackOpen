@@ -41,29 +41,29 @@ app.get('/api/persons', (req, res) => {
 //   if (!person) return res.status(404).end();
 // });
 
-// app.post('/api/persons', (req, res) => {
-//   const { name, number } = req.body;
+app.post('/api/persons', (req, res) => {
+  const { name, number } = req.body;
 
-//   if (!name || !number) {
-//     return res.status(400).json({
-//       error: 'name or number is missing',
-//     });
-//   }
-//   // else if (persons.some((e) => e.name === name)) {
-//   //   return res.status(400).json({
-//   //     error: 'name must be unique',
-//   //   });
-//   // }
+  if (!name || !number) {
+    return res.status(400).json({
+      error: 'name or number is missing',
+    });
+  }
+  // else if (persons.some((e) => e.name === name)) {
+  //   return res.status(400).json({
+  //     error: 'name must be unique',
+  //   });
+  // }
 
-//   const person = new Person({
-//     name: name,
-//     number: number,
-//   });
+  const person = new Person({
+    name: name,
+    number: number,
+  });
 
-//   person.save().then((savedPerson) => {
-//     return res.status(201).json(savedPerson);
-//   });
-// });
+  person.save().then((savedPerson) => {
+    return res.status(201).json(savedPerson);
+  });
+});
 
 // app.put('/api/persons/:id', (req, res) => {
 //   const person = Person.findByIdAndUpdate(req.params.id, req.body).then(() => {
