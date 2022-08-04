@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 content-type: application/json
 
 {
-  "title": "My programming Journey to the West",
+  "title": "Second blog",
   "author": "Vladyslav Ostapchuk",
-  "url": "https://github.com/VladyslavOstapchuk0/FullStackOpen/",
-  "likes": 1000
+  "url": "https://google.com/",
+  "likes": 123456
 }
