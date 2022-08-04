@@ -27,7 +27,7 @@ let persons = [
 ];
 
 const generateId = () => {
-  return Math.floor(Math.random() * 1000000);
+  return Math.floor(Math.random() * 100000);
 };
 
 app.get('/api/persons', (req, res) => {
@@ -37,9 +37,13 @@ app.get('/api/persons', (req, res) => {
 app.post('/api/persons', (req, res) => {
   const body = req.body;
 
-  if (!body.name) {
+  if (!body.name || !body.number) {
     return res.status(400).json({
-      error: 'name missing',
+      error: 'name or number is missing',
+    });
+  } else if (persons.some((e) => e.name === body.name)) {
+    return res.status(400).json({
+      error: 'name must be unique',
     });
   }
 
@@ -49,7 +53,7 @@ app.post('/api/persons', (req, res) => {
     id: generateId(),
   };
 
-  res.json(person);
+  res.status(201).json(person);
 });
 
 app.get('/api/info', (req, res) => {
