@@ -17,8 +17,30 @@ mongoose
   });
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    minlength: 3,
+    required: true,
+  },
+  number: {
+    type: String,
+    minlength: 8,
+    required: true,
+    validate: {
+      validator: function check(str) {
+        if (str.length < 8) return false;
+        const s = str.split('-');
+        if (
+          (s[0].length === 3 || s[0].length === 2) &&
+          s[0].match(/^[0-9]+$/) != null
+        ) {
+          if (s[1].match(/^[0-9]+$/) != null) {
+            return true;
+          } else return false;
+        } else return false;
+      },
+    },
+  },
 });
 
 personSchema.set('toJSON', {
