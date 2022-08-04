@@ -72,12 +72,12 @@ app.post('/api/persons', (req, res) => {
 //   if (!person) return res.sendStatus(404);
 // });
 
-// app.delete('/api/persons/:id', (req, res) => {
-//   const person = Person.findByIdAndDelete(req.params.id).then(() => {
-//     return res.status(204).end();
-//   });
-//   if (!person) return res.sendStatus(404);
-// });
+app.delete('/api/persons/:id', (req, res) => {
+  const person = Person.findByIdAndDelete(req.params.id).then(() => {
+    return res.status(204).end();
+  });
+  if (!person) return res.sendStatus(404);
+});
 
 const unknownEndpoint = (req, res) => {
   return res.status(404).send({ error: 'unknown endpoint' });
