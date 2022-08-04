@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+app.use(express.json());
+
 let persons = [
   {
     id: 1,
@@ -24,10 +26,30 @@ let persons = [
   },
 ];
 
-app.use(express.json());
+const generateId = () => {
+  return Math.floor(Math.random() * 1000000);
+};
 
 app.get('/api/persons', (req, res) => {
   res.json(persons);
+});
+
+app.post('/api/persons', (req, res) => {
+  const body = req.body;
+
+  if (!body.name) {
+    return res.status(400).json({
+      error: 'name missing',
+    });
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number || '',
+    id: generateId(),
+  };
+
+  res.json(person);
 });
 
 app.get('/api/info', (req, res) => {
