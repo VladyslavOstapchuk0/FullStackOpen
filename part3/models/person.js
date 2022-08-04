@@ -9,7 +9,7 @@ console.log('connecting to', url);
 
 mongoose
   .connect(url)
-  .then((result) => {
+  .then(() => {
     console.log('connected to MongoDB');
   })
   .catch((error) => {
@@ -32,9 +32,9 @@ const personSchema = new mongoose.Schema({
         const s = str.split('-');
         if (
           (s[0].length === 3 || s[0].length === 2) &&
-          s[0].match(/^[0-9]+$/) != null
+          s[0].match(/^[0-9]+$/) !== null
         ) {
-          if (s[1].match(/^[0-9]+$/) != null) {
+          if (s[1].match(/^[0-9]+$/) !== null) {
             return true;
           } else return false;
         } else return false;

@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 const Person = require('./models/person');
 
-morgan.token('body', (req, res) => {
+morgan.token('body', (req) => {
   if (req.method === 'POST') return JSON.stringify(req.body);
   return '';
 });
@@ -79,7 +79,7 @@ app.put('/api/persons/:id', (req, res, next) => {
   )
     .then((updatedResult) => {
       if (updatedResult) res.json(updatedResult);
-      else throw error;
+      else throw new Error();
     })
     .catch((error) => next(error));
 });
