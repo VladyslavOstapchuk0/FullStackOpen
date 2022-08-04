@@ -29,8 +29,14 @@ const generateId = () => {
   return Math.floor(Math.random() * 100000);
 };
 
+morgan.token('body', (req, res) => {
+  if (req.method === 'POST') return JSON.stringify(req.body);
+});
+
 app.use(express.json());
-app.use(morgan('tiny'));
+app.use(
+  morgan(':method :url :status :res[content-length] - :response-time ms :body')
+);
 
 app.get('/api/persons', (req, res) => {
   res.json(persons);
