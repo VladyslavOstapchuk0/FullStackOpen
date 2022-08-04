@@ -75,19 +75,19 @@ app.post('/api/persons', (req, res) => {
     .catch((error) => next(error));
 });
 
-// app.put('/api/persons/:id', (req, res) => {
-//   const { name, number } = req.body;
-//   const person = {
-//     name,
-//     number,
-//   };
+app.put('/api/persons/:id', (req, res) => {
+  const { name, number } = req.body;
+  const person = {
+    name,
+    number,
+  };
 
-//   Person.findByIdAndUpdate(req.params.id, person, { new: true })
-//     .then((updatedResult) => {
-//       res.json(updatedResult);
-//     })
-//     .catch((error) => next(error));
-// });
+  Person.findByIdAndUpdate(req.params.id, person, { new: true })
+    .then((updatedResult) => {
+      res.json(updatedResult);
+    })
+    .catch((error) => next(error));
+});
 
 app.delete('/api/persons/:id', (req, res) => {
   Person.findByIdAndDelete(req.params.id)
