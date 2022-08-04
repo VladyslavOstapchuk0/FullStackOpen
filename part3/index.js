@@ -1,12 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
-let { persons } = require('./db.json');
-
-const generateId = () => {
-  return Math.floor(Math.random() * 100000);
-};
+const Person = require('./models/person');
 
 morgan.token('body', (req, res) => {
   if (req.method === 'POST') return JSON.stringify(req.body);
@@ -20,66 +17,70 @@ app.use(
 );
 app.use(cors());
 
+// app.get('/api/info', (req, res) => {
+//   const person = Person.find({}).then((persons) => {
+//     return res.send(
+//       `<p>Phonebook has info for ${persons.length} people</p>
+//       <p>${new Date()}</p>
+//       `
+//     );
+//   });
+//   if (!person) return res.status(404).end();
+// });
+
 app.get('/api/persons', (req, res) => {
-  res.json(persons);
+  Person.find({}).then((persons) => {
+    return res.json(persons);
+  });
 });
 
-app.post('/api/persons', (req, res) => {
-  const { name, number } = req.body;
+// app.get('/api/persons/:id', (req, res) => {
+//   const person = Person.findById(req.params.id).then((person) => {
+//     return res.json(person);
+//   });
+//   if (!person) return res.status(404).end();
+// });
 
-  if (!name || !number) {
-    return res.status(400).json({
-      error: 'name or number is missing',
-    });
-  } else if (persons.some((e) => e.name === name)) {
-    return res.status(400).json({
-      error: 'name must be unique',
-    });
-  }
+// app.post('/api/persons', (req, res) => {
+//   const { name, number } = req.body;
 
-  const person = {
-    name: name,
-    number: number || '',
-    id: generateId(),
-  };
+//   if (!name || !number) {
+//     return res.status(400).json({
+//       error: 'name or number is missing',
+//     });
+//   }
+//   // else if (persons.some((e) => e.name === name)) {
+//   //   return res.status(400).json({
+//   //     error: 'name must be unique',
+//   //   });
+//   // }
 
-  persons.push(person);
-  res.status(201).json(person);
-});
+//   const person = new Person({
+//     name: name,
+//     number: number,
+//   });
 
-app.get('/api/info', (req, res) => {
-  res.send(
-    `<p>Phonebook has info for ${persons.length} people</p>
-    <p>${new Date()}</p>
-    `
-  );
-});
+//   person.save().then((savedPerson) => {
+//     return res.status(201).json(savedPerson);
+//   });
+// });
 
-app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const person = persons.find((person) => person.id === id);
+// app.put('/api/persons/:id', (req, res) => {
+//   const person = Person.findByIdAndUpdate(req.params.id, req.body).then(() => {
+//     return res.status(204).end();
+//   });
+//   if (!person) return res.sendStatus(404);
+// });
 
-  if (person) {
-    res.json(person);
-  } else {
-    res.status(404).end();
-  }
-});
-
-app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const person = persons.find((person) => person.id === id);
-
-  if (!person) {
-    return res.sendStatus(404);
-  }
-
-  persons = persons.filter((person) => person.id !== id);
-  res.status(204).end();
-});
+// app.delete('/api/persons/:id', (req, res) => {
+//   const person = Person.findByIdAndDelete(req.params.id).then(() => {
+//     return res.status(204).end();
+//   });
+//   if (!person) return res.sendStatus(404);
+// });
 
 const unknownEndpoint = (req, res) => {
-  res.status(404).send({ error: 'unknown endpoint' });
+  return res.status(404).send({ error: 'unknown endpoint' });
 };
 
 app.use(unknownEndpoint);

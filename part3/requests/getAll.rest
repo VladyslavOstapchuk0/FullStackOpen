@@ -1,1 +1,1 @@
-GET http://localhost:3001/api/persons/
+GET https://fullstack-open-2022.herokuapp.com/api/persons/
