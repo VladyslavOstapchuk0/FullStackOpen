@@ -17,16 +17,16 @@ app.use(
 );
 app.use(cors());
 
-// app.get('/api/info', (req, res) => {
-//   const person = Person.find({}).then((persons) => {
-//     return res.send(
-//       `<p>Phonebook has info for ${persons.length} people</p>
-//       <p>${new Date()}</p>
-//       `
-//     );
-//   });
-//   if (!person) return res.status(404).end();
-// });
+app.get('/api/info', (req, res) => {
+  const person = Person.find({}).then((persons) => {
+    return res.send(
+      `<p>Phonebook has info for ${persons.length} people</p>
+      <p>${new Date()}</p>
+      `
+    );
+  });
+  if (!person) return res.status(404).end();
+});
 
 app.get('/api/persons', (req, res, next) => {
   Person.find({})
@@ -40,13 +40,13 @@ app.get('/api/persons', (req, res, next) => {
     .catch((error) => next(error));
 });
 
-// app.get('/api/persons/:id', (req, res) => {
-//   Person.findById(req.params.id)
-//     .then((person) => {
-//       res.json(person);
-//     })
-//     .catch((error) => next(error));
-// });
+app.get('/api/persons/:id', (req, res) => {
+  Person.findById(req.params.id)
+    .then((person) => {
+      res.json(person);
+    })
+    .catch((error) => next(error));
+});
 
 app.post('/api/persons', (req, res) => {
   const { name, number } = req.body;
