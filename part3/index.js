@@ -28,17 +28,24 @@ app.use(cors());
 //   if (!person) return res.status(404).end();
 // });
 
-app.get('/api/persons', (req, res) => {
-  Person.find({}).then((persons) => {
-    return res.json(persons);
-  });
+app.get('/api/persons', (req, res, next) => {
+  Person.find({})
+    .then((persons) => {
+      if (persons) {
+        res.json(persons);
+      } else {
+        res.status(404).end();
+      }
+    })
+    .catch((error) => next(error));
 });
 
 // app.get('/api/persons/:id', (req, res) => {
-//   const person = Person.findById(req.params.id).then((person) => {
-//     return res.json(person);
-//   });
-//   if (!person) return res.status(404).end();
+//   Person.findById(req.params.id)
+//     .then((person) => {
+//       res.json(person);
+//     })
+//     .catch((error) => next(error));
 // });
 
 app.post('/api/persons', (req, res) => {
@@ -60,23 +67,34 @@ app.post('/api/persons', (req, res) => {
     number: number,
   });
 
-  person.save().then((savedPerson) => {
-    return res.status(201).json(savedPerson);
-  });
+  person
+    .save()
+    .then((result) => {
+      res.status(201).json(result);
+    })
+    .catch((error) => next(error));
 });
 
 // app.put('/api/persons/:id', (req, res) => {
-//   const person = Person.findByIdAndUpdate(req.params.id, req.body).then(() => {
-//     return res.status(204).end();
-//   });
-//   if (!person) return res.sendStatus(404);
+//   const { name, number } = req.body;
+//   const person = {
+//     name,
+//     number,
+//   };
+
+//   Person.findByIdAndUpdate(req.params.id, person, { new: true })
+//     .then((updatedResult) => {
+//       res.json(updatedResult);
+//     })
+//     .catch((error) => next(error));
 // });
 
 app.delete('/api/persons/:id', (req, res) => {
-  const person = Person.findByIdAndDelete(req.params.id).then(() => {
-    return res.status(204).end();
-  });
-  if (!person) return res.sendStatus(404);
+  Person.findByIdAndDelete(req.params.id)
+    .then((result) => {
+      res.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
 const unknownEndpoint = (req, res) => {
@@ -84,6 +102,17 @@ const unknownEndpoint = (req, res) => {
 };
 
 app.use(unknownEndpoint);
+
+const errorHandling = (error, req, res, next) => {
+  console.error(error.message);
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformed id' });
+  }
+
+  next(error);
+};
+
+app.use(errorHandling);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
