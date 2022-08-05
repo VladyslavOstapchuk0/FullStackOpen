@@ -21,8 +21,31 @@ const favoriteBlog = (blogs) => {
   };
 };
 
+const mostBlogs = (blogs) => {
+  // Get authors
+  const authors = blogs.map((blog) => blog.author);
+
+  // If author has a blog, add to count
+  const blogsAuthor = authors.reduce((obj, el) => {
+    obj[el] ? obj[el]++ : (obj[el] = 1);
+
+    return obj;
+  }, {});
+
+  // find most blogs by author
+  const mostBlogsAuthor = Object.entries(blogsAuthor).reduce((max, el) => {
+    return blogsAuthor[max] > blogsAuthor[el] ? max : el;
+  }, []);
+
+  return {
+    author: mostBlogsAuthor[0],
+    blogs: mostBlogsAuthor[1],
+  };
+};
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
+  mostBlogs,
 };
