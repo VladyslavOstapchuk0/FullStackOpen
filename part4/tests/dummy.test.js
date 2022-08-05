@@ -124,8 +124,29 @@ describe('most blogs on author', () => {
       blogs: 3,
     });
   });
-  test('when list is empty, blog is empty', () => {
+  test('when list is empty, return is empty', () => {
     const result = listHelper.mostBlogs([]);
+    expect(result).toEqual({});
+  });
+});
+
+describe('most likes across blogs on author', () => {
+  test('when list has only one blog, return author and number of likes', () => {
+    const result = listHelper.mostLikes(listWithOneBlog);
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
+    });
+  });
+  test('when list has multiple blogs, returns author with most total likes on his blogs', () => {
+    const result = listHelper.mostLikes(blogs);
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17,
+    });
+  });
+  test('when list is empty, return is empty', () => {
+    const result = listHelper.mostLikes([]);
     expect(result).toEqual({});
   });
 });
