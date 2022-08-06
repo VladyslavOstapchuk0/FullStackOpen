@@ -31,8 +31,16 @@ describe('get blogs', () => {
   test('a specific note is within the returned blogs', async () => {
     const res = await api.get('/api/blogs');
 
-    const title = res.body.map((r) => r.title);
-    expect(title).toContain('Second blog');
+    const titles = res.body.map((blog) => blog.title);
+    expect(titles).toContain('Second blog');
+  });
+
+  test('unique identifier is called id and not _id', async () => {
+    const res = await api.get('/api/blogs');
+
+    expect(
+      res.body[0].id && res.body[1].id && !res.body[0]._id && !res.body[1]._id
+    ).toBeDefined();
   });
 });
 
