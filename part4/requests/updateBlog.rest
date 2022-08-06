@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/62eea8e7ad8e896ee561f7c0
+content-type: application/json
+
+{
+  "title": "Second blog",
+  "author": "Vladyslav Ostapchuk",
+  "url": "https://google.com/",
+  "likes": 27
+}
