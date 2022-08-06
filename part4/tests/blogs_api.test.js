@@ -65,6 +65,26 @@ describe('create new blogs', () => {
     const titles = blogsAtEnd.map((blog) => blog.title);
     expect(titles).toContain('New blog to be added');
   });
+
+  test('when blog has no likes property, it defaults to 0', async () => {
+    const newBlogWithNoLikes = {
+      title: 'New blog to be added',
+      author: 'Vladyslav Ostapchuk',
+      url: 'newCoolBlog.com',
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlogWithNoLikes)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+    const likes = blogsAtEnd.map((blog) => blog.likes);
+    expect(likes).toContain(0);
+  });
 });
 
 afterAll(() => {
