@@ -7,14 +7,10 @@ const Blog = require('../models/blog');
 
 beforeEach(async () => {
   await Blog.deleteMany({});
-
-  for (let blog of helper.initialBlogs) {
-    let blogObject = new Blog(blog);
-    await blogObject.save();
-  }
+  await Blog.insertMany(helper.initialBlogs);
 });
 
-describe('get blogs', () => {
+describe('when there is initially some blogs saved', () => {
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -45,8 +41,8 @@ describe('get blogs', () => {
   });
 });
 
-describe('create new blogs', () => {
-  test('blog can be added', async () => {
+describe('addition of a new blog', () => {
+  test('succeeds with valid data', async () => {
     const newBlog = {
       title: 'New blog to be added',
       author: 'Vladyslav Ostapchuk',
@@ -67,7 +63,7 @@ describe('create new blogs', () => {
     expect(titles).toContain('New blog to be added');
   });
 
-  test('when blog has no likes property, it defaults to 0', async () => {
+  test('succeeds with valid data and no likes property, but likes defaults to 0', async () => {
     const newBlogWithoutLikes = {
       title: 'New blog to be added',
       author: 'Vladyslav Ostapchuk',
@@ -94,6 +90,31 @@ describe('create new blogs', () => {
     };
 
     await api.post('/api/blogs').send(newBlogWithoutUrlAndTitle).expect(400);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
+  });
+});
+
+describe('deletion of a blog', () => {
+  test('succeeds with 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogsToDelete = blogsAtStart[0];
+
+    await api.delete(`/api/blogs/${blogsToDelete.id}`).expect(204);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+
+    const titles = blogsAtEnd.map((blog) => blog.title);
+    expect(titles).not.toContain(blogsToDelete.title);
+  });
+
+  test('succeeds with 400 if id is invalid', async () => {
+    const blogToDelete = await helper.nonExistingId();
+
+    await api.delete(`/api/blogs/${blogToDelete}`).expect(400);
+
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
   });
