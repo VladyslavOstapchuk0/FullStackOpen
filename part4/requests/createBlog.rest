@@ -5,5 +5,5 @@ content-type: application/json
   "title": "Second blog",
   "author": "Vladyslav Ostapchuk",
   "url": "https://google.com/",
-  "likes": 123456
+  "likes": 12
 }
