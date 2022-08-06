@@ -28,7 +28,7 @@ describe('get blogs', () => {
     expect(res.body).toHaveLength(helper.initialBlogs.length);
   });
 
-  test('a specific note is within the returned blogs', async () => {
+  test('a specific blog is within the returned blogs', async () => {
     const res = await api.get('/api/blogs');
 
     const titles = res.body.map((blog) => blog.title);
@@ -41,6 +41,29 @@ describe('get blogs', () => {
     expect(
       res.body[0].id && res.body[1].id && !res.body[0]._id && !res.body[1]._id
     ).toBeDefined();
+  });
+});
+
+describe('create new blogs', () => {
+  test('blog can be added', async () => {
+    const newBlog = {
+      title: 'New blog to be added',
+      author: 'Vladyslav Ostapchuk',
+      url: 'newCoolBlog.com',
+      likes: 789,
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+    const titles = blogsAtEnd.map((blog) => blog.title);
+    expect(titles).toContain('New blog to be added');
   });
 });
 
