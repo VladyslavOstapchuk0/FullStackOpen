@@ -38,9 +38,10 @@ describe('get blogs', () => {
   test('unique identifier is called id and not _id', async () => {
     const res = await api.get('/api/blogs');
 
-    expect(
-      res.body[0].id && res.body[1].id && !res.body[0]._id && !res.body[1]._id
-    ).toBeDefined();
+    expect(res.body[0]._id).toBeUndefined();
+    expect(res.body[1]._id).toBeUndefined();
+    expect(res.body[1].id).toBeDefined();
+    expect(res.body[1].id).toBeDefined();
   });
 });
 
@@ -67,7 +68,7 @@ describe('create new blogs', () => {
   });
 
   test('when blog has no likes property, it defaults to 0', async () => {
-    const newBlogWithNoLikes = {
+    const newBlogWithoutLikes = {
       title: 'New blog to be added',
       author: 'Vladyslav Ostapchuk',
       url: 'newCoolBlog.com',
@@ -75,7 +76,7 @@ describe('create new blogs', () => {
 
     await api
       .post('/api/blogs')
-      .send(newBlogWithNoLikes)
+      .send(newBlogWithoutLikes)
       .expect(201)
       .expect('Content-Type', /application\/json/);
 
@@ -84,6 +85,17 @@ describe('create new blogs', () => {
 
     const likes = blogsAtEnd.map((blog) => blog.likes);
     expect(likes).toContain(0);
+  });
+
+  test('when blog has no title and url, then request is fails with 400', async () => {
+    const newBlogWithoutUrlAndTitle = {
+      author: 'Vladyslav Ostapchuk',
+      likes: 10,
+    };
+
+    await api.post('/api/blogs').send(newBlogWithoutUrlAndTitle).expect(400);
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
   });
 });
 

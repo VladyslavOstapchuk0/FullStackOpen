@@ -12,12 +12,12 @@ const unknownEndpoint = (req, res) => {
   res.status(404).send({ err: 'unknown endpoint' });
 };
 
-const errHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res, next) => {
   logger.error(err.message);
 
-  if (err.name === 'Casterr') {
+  if (err.name === 'CastError') {
     return res.status(400).send({ err: 'malformatted id' });
-  } else if (err.name === 'Validationerr') {
+  } else if (err.name === 'ValidationError') {
     return res.status(400).json({ err: err.message });
   }
 
@@ -27,5 +27,5 @@ const errHandler = (err, req, res, next) => {
 module.exports = {
   reqLogger,
   unknownEndpoint,
-  errHandler,
+  errorHandler,
 };
