@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlZsYWR5c2xhdk9zdGFwY2h1azAiLCJpZCI6IjYyZWYxMGM4NjE2OGM5YzdkZTQ1MTM4OSIsImlhdCI6MTY1OTg0MDQxNH0.jKQa-PO5p54brvwwKpvh6MYKkQK_g6s1DVULzEwDvow
 
 {
   "title": "With login, part2",
   "author": "Vladyslav Ostapchuk",
   "url": "https://google.com/",
-  "likes": 4,
-  "userId": "62ef10c86168c9c7de451389"
+  "likes": 4
 }
