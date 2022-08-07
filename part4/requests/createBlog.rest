@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlZsYWR5c2xhdk9zdGFwY2h1azAiLCJpZCI6IjYyZWYxMGM4NjE2OGM5YzdkZTQ1MTM4OSIsImlhdCI6MTY1OTg0MDQxNH0.jKQa-PO5p54brvwwKpvh6MYKkQK_g6s1DVULzEwDvow
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlZsYWR5c2xhdk9zdGFwY2h1azAiLCJpZCI6IjYyZWYzNTYyNTQ3ZWY4M2M3MTI4NzFmMSIsImlhdCI6MTY1OTg0Mzk5MywiZXhwIjoxNjU5ODQ3NTkzfQ.pwsfJAHZf84nHZMJFoOkiVmmF10b04Xwv1jqZP5MNjc
 
 {
   "title": "With login, part2",
