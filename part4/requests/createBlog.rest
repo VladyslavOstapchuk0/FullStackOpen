@@ -2,8 +2,9 @@ POST http://localhost:3003/api/blogs
 content-type: application/json
 
 {
-  "title": "Second blog",
+  "title": "With login, part2",
   "author": "Vladyslav Ostapchuk",
   "url": "https://google.com/",
-  "likes": 12
+  "likes": 4,
+  "userId": "62ef10c86168c9c7de451389"
 }
