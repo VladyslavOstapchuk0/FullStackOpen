@@ -9,7 +9,11 @@ blogsRouter.get('/', async (req, res) => {
 
 blogsRouter.post('/', async (req, res) => {
   const { title, author, url, likes, userId } = req.body;
-  const user = await User.findById(userId);
+  let user = await User.findById(userId);
+  if (!user) {
+    const newUser = await User.find({});
+    user = newUser[0];
+  }
 
   const blog = new Blog({
     title,
