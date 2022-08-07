@@ -51,12 +51,11 @@ blogsRouter.delete('/:id', async (req, res) => {
     return res.status(401).json({ err: 'token missing or invalid' });
   }
 
-  const id = req.params.id;
-  const blog = await Blog.findById(id);
+  const blog = await Blog.findById(req.params.id);
   if (!blog) return res.status(400).json({ err: 'no blog with such id' });
 
   if (blog.user.toString() === user.id.toString()) {
-    await Blog.deleteOne({ _id: id });
+    await Blog.deleteOne({ _id: req.params.id });
     res.status(204).end();
   } else {
     res.status(403).json({ err: 'unauthorized' });
@@ -67,13 +66,13 @@ blogsRouter.put('/:id', async (req, res) => {
   const { title, author, url, likes } = req.body;
   const token = req.token;
   const user = req.user;
+
   const decodedToken = jwt.verify(token, process.env.SECRET);
   if (!decodedToken.id) {
     return res.status(401).json({ err: 'token missing or invalid' });
   }
 
-  const id = req.params.id;
-  const blog = await Blog.findById(id);
+  const blog = await Blog.findById(req.params.id);
   if (!blog) return res.status(400).json({ err: 'no blog with such id' });
 
   if (blog.user.toString() === user.id.toString()) {
@@ -83,7 +82,7 @@ blogsRouter.put('/:id', async (req, res) => {
       url,
       likes,
     };
-    const result = await Blog.updateOne({ _id: id }, updatedBlog, {
+    const result = await Blog.updateOne({ _id: req.params.id }, updatedBlog, {
       new: true,
     });
     result ? res.status(200).json(updatedBlog) : res.status(400).end();
